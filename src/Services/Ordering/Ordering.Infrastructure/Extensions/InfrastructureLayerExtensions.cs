@@ -7,6 +7,7 @@ using Ordering.Application.Models;
 using Ordering.Infrastructure.Mail;
 using Ordering.Infrastructure.Persistence;
 using Ordering.Infrastructure.Repositories;
+using System;
 
 namespace Ordering.Infrastructure.Extensions
 {
@@ -15,7 +16,10 @@ namespace Ordering.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureLayerServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<OrderContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("OrderingConnectionString")));
+                options.UseSqlServer(configuration.GetConnectionString("OrderingConnectionString"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                }));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
             services.AddScoped<IOrderRepository, OrderRepository>();
