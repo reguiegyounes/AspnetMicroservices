@@ -33,6 +33,8 @@ namespace Basket.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
             });
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddScoped<DiscountGrpcService>();
             services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opt =>
                 opt.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"])
