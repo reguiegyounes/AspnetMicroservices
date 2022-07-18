@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace OceloteApiGw
+namespace OcelotApiGw
 {
     public class Program
     {
@@ -15,6 +16,11 @@ namespace OceloteApiGw
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureLogging((hostingContext,loggingBuilder) => {
+                    loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    loggingBuilder.AddConsole();
+                    loggingBuilder.AddDebug();
                 });
     }
 }
